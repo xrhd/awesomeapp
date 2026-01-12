@@ -1,35 +1,37 @@
-import hashlib
-from pydantic import BaseModel
+import pandas as pd
+from typing import List, Dict
 
-class VibeResult(BaseModel):
-    score: int
-    message: str
-    color_class: str
+# Global DataFrame
+_quotes_df = None
 
-def calculate_vibe(name: str, emoji: str) -> VibeResult:
-    # Deterministic hash based on name + emoji
-    input_str = f"{name.lower().strip()}{emoji}"
-    hash_obj = hashlib.sha256(input_str.encode())
-    # Convert first byte to 0-100 score
-    score = int(hash_obj.hexdigest(), 16) % 101
+def load_data():
+    global _quotes_df
+    if _quotes_df is None:
+        try:
+            print("Loading quotes dataset...")
+            _quotes_df = pd.read_json("hf://datasets/Abirate/english_quotes/quotes.jsonl", lines=True)
+            print(f"Loaded {_quotes_df.shape[0]} quotes.")
+        except Exception as e:
+            print(f"Error loading dataset: {e}")
+            _quotes_df = pd.DataFrame(columns=["quote", "author", "tags"])
 
-    if score > 90:
-        msg = "LEGENDARY VIBES. You radiate pure Solarized Yellow energy."
-        color = "text-solarized-yellow"
-    elif score > 75:
-        msg = "Immaculate vibes. Like a well-configured neovim setup."
-        color = "text-solarized-green"
-    elif score > 50:
-        msg = "Solid vibes. You get the job done, no fuss."
-        color = "text-solarized-cyan"
-    elif score > 30:
-        msg = "Meh. Your vibes are deprecated."
-        color = "text-solarized-violet"
-    elif score > 10:
-        msg = "Yikes. Try restarting your router."
-        color = "text-solarized-orange"
-    else:
-        msg = "VIBE CHECK FAILED. Segfault immediately."
-        color = "text-solarized-red"
+def search_quotes(query: str) -> List[Dict]:
+    global _quotes_df
+    if _quotes_df is None:
+        load_data()
+    
+    if not query:
+        # Return 10 random quotes if no query
+        if _quotes_df.empty:
+            return []
+        return _quotes_df.sample(n=min(10, len(_quotes_df))).to_dict(orient="records")
 
-    return VibeResult(score=score, message=msg, color_class=color)
+    # Filter Case Insensitive
+    mask = (
+        _quotes_df['quote'].str.contains(query, case=False, na=False) | 
+        _quotes_df['author'].str.contains(query, case=False, na=False) |
+        _quotes_df['tags'].apply(lambda x: any(query.lower() in t.lower() for t in x) if isinstance(x, list) else False)
+    )
+    
+    results = _quotes_df[mask].head(20) # Limit to 20
+    return results.to_dict(orient="records")

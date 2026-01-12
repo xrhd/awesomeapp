@@ -3,22 +3,28 @@ from src.main import app
 
 client = TestClient(app)
 
-def test_read_main():
+def test_read_home():
     response = client.get("/")
     assert response.status_code == 200
-    assert "VibeRoast" in response.text
+    assert "Quote Search" in response.text
+    # Check for search input
+    assert 'name="q"' in response.text
 
-def test_rate_vibe():
-    # Test valid input
-    response = client.post("/rate", data={"name": "TestUser", "emoji": "🔥"})
+def test_search_empty():
+    response = client.get("/search")
     assert response.status_code == 200
-    assert "VIBE CHECK" in response.text or "vibes" in response.text.lower()
-    assert "%" in response.text
+    # Should return some random quotes
+    assert "blockquote" in response.text
 
-def test_rate_vibe_deterministic():
-    # Same input should give same result
-    response1 = client.post("/rate", data={"name": "Neo", "emoji": "💀"})
-    response2 = client.post("/rate", data={"name": "Neo", "emoji": "💀"})
-    
-    # Extract score (simplified check)
-    assert response1.text == response2.text
+def test_search_query():
+    # We know "wisdom" exists
+    response = client.get("/search?q=wisdom")
+    assert response.status_code == 200
+    assert "wisdom" in response.text.lower()
+    # Check for quote card structure
+    assert "bg-solarized-base2" in response.text
+
+def test_search_no_results():
+    response = client.get("/search?q=Supercalifragilisticexpialidocious_Not_A_Word")
+    assert response.status_code == 200
+    assert "No quotes found" in response.text

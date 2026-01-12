@@ -1,0 +1,33 @@
+{% if quotes %}
+{% for quote in quotes %}
+<div class="p-6 rounded-lg border transition-all hover:shadow-lg break-inside-avoid
+        bg-solarized-base2 border-solarized-base1
+        dark:bg-solarized-base02 dark:border-solarized-base01">
+
+    <blockquote class="text-lg italic mb-4 font-serif text-solarized-base00 dark:text-solarized-base0">
+        "{{ quote.quote }}"
+    </blockquote>
+
+    <div class="flex items-center justify-between mt-2">
+        <div class="font-bold text-sm text-solarized-yellow">
+            — {{ quote.author }}
+        </div>
+    </div>
+
+    {% if quote.tags %}
+    <div class="mt-3 flex flex-wrap gap-2">
+        {% for tag in quote.tags %}
+        <span
+            class="text-xs px-2 py-1 rounded-full bg-solarized-base1/20 text-solarized-cyan dark:bg-solarized-base01/20 dark:text-solarized-blue">
+            #{{ tag }}
+        </span>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endfor %}
+{% else %}
+<div class="col-span-full text-center p-8 text-solarized-orange">
+    No quotes found in current timeline.
+</div>
+{% endif %}

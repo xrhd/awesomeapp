@@ -4,46 +4,30 @@
 <div class="glass-panel p-8 rounded-lg text-center transition-colors duration-300
     bg-solarized-base2/80 border-solarized-base1/50
     dark:bg-solarized-base02/80 dark:border-solarized-base01/50
-    border" id="main-card">
+    border w-full max-w-2xl mx-auto" id="main-card">
 
-    <h1 class="text-4xl font-bold mb-2 text-solarized-yellow">VibeRoast</h1>
-    <p class="mb-8 text-solarized-base01 dark:text-solarized-base1">Using advanced algorithms to judge your soul.</p>
+    <h1 class="text-4xl font-bold mb-2 text-solarized-yellow">Awesome App</h1>
+    <p class="mb-8 text-solarized-base01 dark:text-solarized-base1">Quote Search: Instant wisdom from the ether.</p>
 
-    <form hx-post="/rate" hx-target="#result-area" hx-swap="innerHTML" class="space-y-6">
-        <div>
-            <label class="block text-left mb-2 text-sm uppercase tracking-widest text-solarized-cyan">Name Ident</label>
-            <input type="text" name="name" required placeholder="e.g. Neo" class="w-full rounded p-3 focus:outline-none transition-colors border
+    <div class="space-y-6">
+        <div class="relative">
+            <input type="text" name="q" placeholder="Search by quote, author, or tag..." hx-get="/search"
+                hx-trigger="keyup changed delay:300ms, search" hx-target="#search-results"
+                hx-indicator="#search-indicator" class="w-full rounded p-4 text-lg focus:outline-none transition-colors border shadow-sm
                 bg-solarized-base3 text-solarized-base00 border-solarized-base1 focus:border-solarized-blue
                 dark:bg-solarized-base02 dark:text-solarized-base0 dark:border-solarized-base01">
+
+            <div id="search-indicator" class="htmx-indicator absolute right-4 top-4">
+                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-solarized-blue"></div>
+            </div>
         </div>
+    </div>
 
-        <div>
-            <label class="block text-left mb-2 text-sm uppercase tracking-widest text-solarized-cyan">Spirit
-                Emoji</label>
-            <select name="emoji" class="w-full rounded p-3 focus:outline-none transition-colors appearance-none border
-                bg-solarized-base3 text-solarized-base00 border-solarized-base1 focus:border-solarized-blue
-                dark:bg-solarized-base02 dark:text-solarized-base0 dark:border-solarized-base01">
-                <option value="💀">💀 Skull</option>
-                <option value="🔥">🔥 Fire</option>
-                <option value="✨">✨ Sparkles</option>
-                <option value="🤡">🤡 Clown</option>
-                <option value="👽">👽 Alien</option>
-                <option value="🤖">🤖 Robot</option>
-                <option value="☕">☕ Coffee</option>
-                <option value="🚀">🚀 Rocket</option>
-            </select>
+    <div id="search-results" class="mt-8 grid gap-4 grid-cols-1 md:grid-cols-2 text-left">
+        <!-- Results will be injected here -->
+        <div class="col-span-full text-center text-solarized-base01 dark:text-solarized-base1 opacity-50 py-12">
+            Type to uncover hidden truths...
         </div>
-
-        <button type="submit"
-            class="w-full bg-solarized-magenta hover:bg-opacity-90 text-white font-bold py-3 px-6 rounded transition-transform transform hover:scale-105 active:scale-95 shadow-lg shadow-solarized-magenta/20">
-            COMPUTE VIBES
-        </button>
-    </form>
-
-    <div id="result-area" class="mt-8 min-h-[100px] flex items-center justify-center">
-        <!-- Result will be injected here -->
-        <span class="text-xs opacity-50 text-solarized-base01 dark:text-solarized-base1">Waiting for input
-            stream...</span>
     </div>
 </div>
 {% endblock %}

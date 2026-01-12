@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VibeRoast</title>
+    <title>Awesome App</title>
+    <link rel="icon" type="image/png" href="/static/favicon.png">
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
     <!-- Google Fonts -->
@@ -82,12 +83,12 @@
      Dark Mode: bg-solarized-base03, text-solarized-base0
 -->
 
-<body class="min-h-screen flex items-center justify-center p-4 transition-colors duration-300
+<body class="min-h-screen flex items-start justify-center p-4 pt-12 transition-colors duration-300
              bg-solarized-base3 text-solarized-base00 
-             dark:bg-solarized-base03 dark:text-solarized-base0">
+             dark:bg-solarized-base03 dark:text-solarized-base0 overflow-y-scroll">
 
     <!-- Theme Toggle -->
-    <button onclick="toggleTheme()" class="absolute top-4 right-4 p-2 rounded-full 
+    <button onclick="toggleTheme()" class="fixed top-4 right-4 p-2 rounded-full z-50
              hover:bg-solarized-base2 dark:hover:bg-solarized-base02 transition-colors">
         <!-- Sun for Dark mode (to switch to light) -->
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden dark:block text-solarized-yellow" fill="none"
@@ -103,7 +104,7 @@
         </svg>
     </button>
 
-    <div class="w-full max-w-md">
+    <div class="w-full max-w-4xl">
         {% block content %}{% endblock %}
     </div>
 </body>

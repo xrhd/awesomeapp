@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Request, Form
+from fastapi import APIRouter, Request, Query
 from fastapi.templating import Jinja2Templates
-from .models import calculate_vibe
+from .models import search_quotes
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -9,11 +9,9 @@ templates = Jinja2Templates(directory="templates")
 def get_home(request: Request):
     return templates.TemplateResponse(request=request, name="index.html")
 
-@router.post("/rate")
-def rate_vibe(request: Request, name: str = Form(...), emoji: str = Form(...)):
-    result = calculate_vibe(name, emoji)
-    return templates.TemplateResponse(request=request, name="result.html", context={
-        "score": result.score, 
-        "message": result.message,
-        "color_class": result.color_class
+@router.get("/search")
+def search(request: Request, q: str = Query("")):
+    results = search_quotes(q)
+    return templates.TemplateResponse(request=request, name="quote_card.html", context={
+        "quotes": results
     })
