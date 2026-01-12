@@ -8,8 +8,16 @@ def load_data():
     global _quotes_df
     if _quotes_df is None:
         try:
-            print("Loading quotes dataset...")
-            _quotes_df = pd.read_json("hf://datasets/Abirate/english_quotes/quotes.jsonl", lines=True)
+            # Try loading from local file (baked into image)
+            local_path = "quotes.jsonl"
+            import os
+            if os.path.exists(local_path):
+                print(f"Loading quotes from local file: {local_path}")
+                _quotes_df = pd.read_json(local_path, lines=True)
+            else:
+                print("Loading quotes dataset from Hugging Face...")
+                _quotes_df = pd.read_json("hf://datasets/Abirate/english_quotes/quotes.jsonl", lines=True)
+                
             print(f"Loaded {_quotes_df.shape[0]} quotes.")
         except Exception as e:
             print(f"Error loading dataset: {e}")
