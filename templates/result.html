@@ -1,0 +1,22 @@
+<div class="animate-pulse transition-colors duration-300 p-4 rounded border w-full
+    bg-solarized-base2 border-solarized-base1
+    dark:bg-solarized-base02 dark:border-solarized-base01">
+
+    <div class="text-6xl font-bold {{ color_class }} mb-2">
+        {{ score }}%
+    </div>
+    <div class="text-lg leading-tight text-solarized-base00 dark:text-solarized-base0">
+        {{ message }}
+    </div>
+
+    <div class="mt-4 pt-4 border-t border-solarized-base1/30 dark:border-solarized-base01/30">
+        <button onclick="alert('Copied to clipboard: {{ score }}% Vibe - {{ message }}')"
+            class="text-xs text-solarized-blue hover:text-solarized-cyan uppercase tracking-wider cursor-pointer">
+            [ Share Result ]
+        </button>
+    </div>
+</div>
+<script>
+    // Remove pulse after animation (optional simple visual flair)
+    document.querySelector('.animate-pulse').classList.remove('animate-pulse');
+</script>

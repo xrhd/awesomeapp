@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeRoast</title>
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind + Config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        solarized: {
+                            base03: '#002b36',
+                            base02: '#073642',
+                            base01: '#586e75',
+                            base00: '#657b83',
+                            base0: '#839496',
+                            base1: '#93a1a1',
+                            base2: '#eee8d5',
+                            base3: '#fdf6e3',
+                            yellow: '#b58900',
+                            orange: '#cb4b16',
+                            red: '#dc322f',
+                            magenta: '#d33682',
+                            violet: '#6c71c4',
+                            blue: '#268bd2',
+                            cyan: '#2aa198',
+                            green: '#859900',
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['"Space Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* Glass panel adaptation */
+        .glass-panel {
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <script>
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark')
+                localStorage.theme = 'light'
+            } else {
+                document.documentElement.classList.add('dark')
+                localStorage.theme = 'dark'
+            }
+        }
+    </script>
+</head>
+<!-- 
+     Light Mode: bg-solarized-base3, text-solarized-base00
+     Dark Mode: bg-solarized-base03, text-solarized-base0
+-->
+
+<body class="min-h-screen flex items-center justify-center p-4 transition-colors duration-300
+             bg-solarized-base3 text-solarized-base00 
+             dark:bg-solarized-base03 dark:text-solarized-base0">
+
+    <!-- Theme Toggle -->
+    <button onclick="toggleTheme()" class="absolute top-4 right-4 p-2 rounded-full 
+             hover:bg-solarized-base2 dark:hover:bg-solarized-base02 transition-colors">
+        <!-- Sun for Dark mode (to switch to light) -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden dark:block text-solarized-yellow" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <!-- Moon for Light mode (to switch to dark) -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 block dark:hidden text-solarized-base01" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+    </button>
+
+    <div class="w-full max-w-md">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+
+</html>
